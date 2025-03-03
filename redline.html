@@ -9,11 +9,11 @@
     <style>
         /* Custom CSS */
         body {
-            background-color: black;
+            background-color: rgb(252, 250, 250);
             font-family: Arial, sans-serif;
         }
         .navbar {
-            background-color: #343a40;
+            background-color: #f83b0c;
         }
         .navbar-brand, .nav-link {
             color: white !important;
@@ -78,7 +78,6 @@
         .hidden {
             display: none;
         }
-        <style>
     .d-flex {
         display: flex;
         align-items: center;
@@ -110,7 +109,21 @@
     .contact-options a, .contact-options button {
         margin: 5px;
     }
-</style>
+
+    /* Custom styles for the "Afficher plus" button */
+    #toggleMovies {
+        background-color: red;
+        color: white;
+        font-size: 14px;
+        margin: 2px;
+        padding: 0px;
+        border: none;
+        cursor: pointer;
+    }
+    #toggleMovies:hover {
+        background-color: darkred;
+    }
+
     </style>
 </head>
 <body>
@@ -312,22 +325,98 @@
                 <iframe src="" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
-        <h3>Film policier</h3>
+        <h3>Film les debaleurs</h3>
         <p>2023 - Comédie</p>
     </div>
 
     <div class="col-md-4 movie-card" data-genre="comedie">
         <div class="d-flex">
-            <img src="lesde" alt="Film 2" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <img src="lesdeuxtours-2002-aventure.jpg" alt="Film 2" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
             <div class="video-container d-none">
                 <button class="close-video btn btn-danger">Fermer</button>
                 <iframe src="" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
-        <h3>Film Comédie 1</h3>
+        <h3>Film fingon tralala</h3>
         <p>2023 - Comédie</p>
     </div>
-        
+    <button id="toggleMovies" class="btn btn-primary mt-4">Afficher plus</button>
+
+<!-- Films les plus recommandés -->
+<section id="recommended-movies" class="container mt-5">
+    <h2>Films les plus recommandés</h2>
+    <div class="row">
+        <!-- Film recommandé 1 -->
+        <div class="col-md-4 movie-card" data-genre="policier">
+            <div class="d-flex">
+                <img src="shutterisland-2010-thriller.jpg" alt="Film Recommandé 1" class="img-fluid movie-img" data-video="recommended-movie-1.mp4">
+                <div class="video-container d-none">
+                    <button class="close-video btn btn-danger">Fermer</button>
+                    <iframe src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <h3>Film justicier de koabang</h3>
+            <p>2023 - Policier</p>
+        </div>
+        <!-- Film recommandé 2 -->
+        <div class="col-md-4 movie-card" data-genre="comedie">
+            <div class="d-flex">
+                <img src="thefall-2006-dramatique.jpg" alt="Film Recommandé 2" class="img-fluid movie-img" data-video="recommended-movie-2.mp4">
+                <div class="video-container d-none">
+                    <button class="close-video btn btn-danger">Fermer</button>
+                    <iframe src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <h3> babylone dans la cité</h3>
+            <p>2023 - Comédie</p>
+        </div>
+        <!-- Film recommandé 3 -->
+        <div class="col-md-4 movie-card" data-genre="horreur">
+            <div class="d-flex">
+                <img src="Survivestyle5-2004-comedie.jpg" alt="Film Recommandé 3" class="img-fluid movie-img" data-video="recommended-movie-3.mp4">
+                <div class="video-container d-none">
+                    <button class="close-video btn btn-danger">Fermer</button>
+                    <iframe src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <h3>terminator</h3>
+            <p>2023 - Horreur</p>
+        </div>
+    </div>
+    
+</section>
+
+
+    <!-- Filtre de films -->
+<section id="film-filters" class="container mt-5">
+    <h2>Filtrer les films</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <label for="yearFilter" class="form-label">Année de sortie</label>
+            <select id="yearFilter" class="form-select">
+                <option value="all">Toutes les années</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <!-- Ajoutez plus d'années si nécessaire -->
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="ratingFilter" class="form-label">Note minimale</label>
+            <select id="ratingFilter" class="form-select">
+                <option value="0">Toutes les notes</option>
+                <option value="5">5 étoiles</option>
+                <option value="4">4 étoiles et plus</option>
+                <option value="3">3 étoiles et plus</option>
+                <!-- Ajoutez plus d'options si nécessaire -->
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button id="applyFilters" class="btn btn-primary mt-4">Appliquer les filtres</button>
+        </div>
+    </div>
+</section>
+
     <!-- Footer -->
 <footer class="footer text-center">
     <p>Le meilleur du ciné</p>
@@ -471,6 +560,36 @@
             });
         });
     });
+
+
+      // Gestion des filtres de films
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        const yearFilter = document.getElementById('yearFilter').value;
+        const ratingFilter = document.getElementById('ratingFilter').value;
+
+        document.querySelectorAll('.movie-card').forEach(card => {
+            const year = card.querySelector('p').textContent.split(' - ')[0];
+            const rating = 5; // Remplacez par la note réelle du film si disponible
+
+            if ((yearFilter === 'all' || year === yearFilter) &&
+                (ratingFilter === '0' || rating >= parseInt(ratingFilter))) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+   // Toggle Movies
+    document.getElementById('toggleMovies').addEventListener('click', function() {
+        const hiddenMovies = document.querySelectorAll('.movie-card.d-none');
+        hiddenMovies.forEach(movie => {
+            movie.classList.toggle('d-none');
+        });
+        this.textContent = this.textContent === 'Afficher plus' ? 'Afficher moins' : 'Afficher plus';
+    });
+
+</script>
 
     
 </script>
