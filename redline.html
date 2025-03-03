@@ -1,12 +1,478 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>allezcine! </title>
+    <title>CinéPlace - Location de Films</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body {
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .jumbotron {
+            background: url('https://via.placeholder.com/1500x500') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 100px 0;
+        }
+        .social-buttons {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .social-buttons button {
+            display: block;
+            margin: 10px 0;
+            transition: width 0.3s;
+        }
+        .social-buttons button:hover {
+            width: 120px;
+        }
+        .movie-card {
+            margin-bottom: 20px;
+        }
+        .movie-card img {
+            cursor: pointer;
+        }
+        .modal iframe {
+            width: 100%;
+            height: 400px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+        }
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            display: none;
+        }
+        .filter-buttons {
+            margin-bottom: 20px;
+        }
+        .filter-buttons button {
+            margin: 5px;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+        .hidden {
+            display: none;
+        }
+        <style>
+    .d-flex {
+        display: flex;
+        align-items: center;
+    }
+    .video-container {
+        margin-left: 20px;
+        flex: 1;
+        position: relative;
+    }
+    .video-container iframe {
+        width: 100%;
+        height: 200px;
+    }
+    .d-none {
+        display: none;
+    }
+    .close-video {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .contact-options {
+        margin-top: 20px;
+    }
+    .contact-options h5 {
+        margin-bottom: 10px;
+    }
+    .contact-options a, .contact-options button {
+        margin: 5px;
+    }
+</style>
+    </style>
 </head>
 <body>
+<!-- Age Verification Popup -->
+<div id="ageVerification" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vérification d'âge</h5>
+            </div>
+            <div class="modal-body">
+                <p>Vous devez avoir 18 ans ou plus pour accéder à ce site.</p>
+                <input type="date" id="birthdateInput" class="form-control" placeholder="Entrez votre date de naissance">
+            </div>
+            <div class="modal-footer">
+                <button id="confirmAge" class="btn btn-primary">Confirmer</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">CinéPlace</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#header">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#movies">Films</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#shop">Boutique</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header with Carousel -->
+    <header id="header" class="text-center">
+        <div id="movieCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <img src="hostel-2005-thriller.jpg" alt="Film 1">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Film Policier 1</h5>
+                        <p>Un thriller captivant.</p>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <img src="movie-trailer-movietrailer.jpg" alt="Film 2">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Film Comédie 1</h5>
+                        <p>Rigolez avec cette comédie hilarante.</p>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="carousel-item">
+                    <img src="batmanmovie-2017-comedie.jpg" alt="Film 3">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Film Horreur 1</h5>
+                        <p>Frissons garantis.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Précédent</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Suivant</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Movies Section -->
+    <section id="movies" class="container">
+        <h2>Films à l'affiche</h2>
+        <!-- Filter Buttons -->
+        <div class="filter-buttons">
+            <button class="btn btn-outline-primary" data-genre="all">Tous</button>
+            <button class="btn btn-outline-primary" data-genre="policier">Policier</button>
+            <button class="btn btn-outline-primary" data-genre="comedie">Comédie</button>
+            <button class="btn btn-outline-primary" data-genre="horreur">Horreur</button>
+            <button class="btn btn-outline-primary" data-genre="romantique">Romantique</button>
+        </div>
+     <div class="row">
+    <!-- Film 1 : Policier -->
+    <div class="col-md-4 movie-card" data-genre="policier">
+        <div class="d-flex">
+            <img src="WhatWeDoInTheShadows-2014-comedie.jpg" alt="Film 1" class="img-fluid movie-img" data-video=dragon.mp4>
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Policier 1</h3>
+        <p>2023 - Policier</p>
+    </div>
+    <!-- Film 2 : Comédie -->
+    <div class="col-md-4 movie-card" data-genre="comedie">
+        <div class="d-flex">
+            <img src="hostel-2005-thriller.jpg" alt="Film 2" class="img-fluid movie-img" data-video="sealteam.mp4">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Comédie 1</h3>
+        <p>2023 - Comédie</p>
+    </div>
+    <!-- film 3 : horreur -->
+  
+<div class="col-md-4 movie-card" data-genre="Horreur">
+        <div class="d-flex">
+            <img src="batmanmovie-2017-comedie.jpg" alt="Film 3" class="img-fluid movie-img" data-video=sololeveling.mkv>
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Comédie 1</h3>
+        <p>2023 - Comédie</p>
+    </div>
+
+
+    <div class="col-md-4 movie-card" data-genre="Horreur">
+        <div class="d-flex">
+            <img src="lepatientanglais-1996-dramatique.jpg" alt="Film 4" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film horeur 1</h3>
+        <p>2023 - horreur</p>
+    </div>
+
+
+    <div class="col-md-4 movie-card" data-genre="comedie">
+        <div class="d-flex">
+            <img src="shutterisland-2010-thriller.jpg" alt="Film 4" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Comédie 1</h3>
+        <p>2023 - Comédie</p>
+    </div>
+
+    <div class="col-md-4 movie-card" data-genre="Romantique">
+        <div class="d-flex">
+            <img src="swissarmyman-2016-comedie.jpg" alt="Film 5" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film  Romantique </h3>
+        <p>2023 - Comédie</p>
+    </div>
+
+
+    <div class="col-md-4 movie-card" data-genre="Romantique">
+        <div class="d-flex">
+            <img src="zoolander-2001-comedie.jpg" alt="Film 2" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Romantique</h3>
+        <p>2023 - police</p>
+    </div>
+
+
+    <div class="col-md-4 movie-card" data-genre="comedie">
+        <div class="d-flex">
+            <img src="starwarsempire-1980-scifi.jpg" alt="Film 7" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Comédie 1</h3>
+        <p>2023 - Comédie</p>
+    </div>
+
+    <div class="col-md-4 movie-card" data-genre="policier">
+        <div class="d-flex">
+            <img src="hostel-2005-thriller.jpg" alt="Film 8" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film policier</h3>
+        <p>2023 - Comédie</p>
+    </div>
+
+    <div class="col-md-4 movie-card" data-genre="comedie">
+        <div class="d-flex">
+            <img src="lesde" alt="Film 2" class="img-fluid movie-img" data-video="https://www.youtube.com/embed/6O8Ovcx4QdpzcASn">
+            <div class="video-container d-none">
+                <button class="close-video btn btn-danger">Fermer</button>
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <h3>Film Comédie 1</h3>
+        <p>2023 - Comédie</p>
+    </div>
+        
+    <!-- Footer -->
+<footer class="footer text-center">
+    <p>Le meilleur du ciné</p>
+    <div class="contact-options">
+        <h5>Contactez-nous</h5>
+        <p>Vous pouvez nous contacter par mail ou par message en utilisant les options ci-dessous :</p>
+        <a href="mailto:votre-email@example.com" class="btn btn-primary">Envoyer un mail</a>
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#messageModal">Envoyer un message</button>
+    </div>
+</footer>
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Envoyer un message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+        
+    </section>
+
+    <!-- Movie Modal -->
+    <div class="modal fade" id="movieModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Détails du Film</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Buttons -->
+    <div class="social-buttons">
+        <button class="btn btn-primary">Facebook</button>
+        <button class="btn btn-info">Twitter</button>
+        <button class="btn btn-danger">YouTube</button>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTop" class="scroll-top">↑</button>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <p> le meilleur du ciné </p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+    // Age Verification
+    document.getElementById('confirmAge').addEventListener('click', function() {
+        const birthdate = new Date(document.getElementById('birthdateInput').value);
+        const today = new Date();
+        let age = today.getFullYear() - birthdate.getFullYear();
+        const monthDifference = today.getMonth() - birthdate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdate.getDate())) {
+            age--;
+        }
+        if (age >= 18) {
+            bootstrap.Modal.getInstance(document.getElementById('ageVerification')).hide();
+        } else {
+            window.location.href = 'https://www.imdb.com';
+        }
+    });
+
+    // Show Age Verification Popup on Load
+    window.onload = function() {
+        new bootstrap.Modal(document.getElementById('ageVerification')).show();
+    };
+
+    // Movie Modal
+    document.querySelectorAll('.movie-img').forEach(img => {
+        img.addEventListener('click', function() {
+            const videoSrc = this.getAttribute('data-video');
+            const videoContainer = this.nextElementSibling;
+            videoContainer.querySelector('iframe').setAttribute('src', videoSrc);
+            videoContainer.classList.remove('d-none');
+        });
+    });
+
+    // Close Video
+    document.querySelectorAll('.close-video').forEach(button => {
+        button.addEventListener('click', function() {
+            const videoContainer = this.parentElement;
+            videoContainer.querySelector('iframe').setAttribute('src', '');
+            videoContainer.classList.add('d-none');
+        });
+    });
+
+    // Scroll to Top Button
+    document.getElementById('scrollTop').addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', function() {
+        const scrollTopButton = document.getElementById('scrollTop');
+        if (window.scrollY > 100) {
+            scrollTopButton.style.display = 'block';
+        } else {
+            scrollTopButton.style.display = 'none';
+        }
+    });
+
+    // Filter Movies by Genre
+    document.querySelectorAll('.filter-buttons button').forEach(button => {
+        button.addEventListener('click', function() {
+            const genre = this.getAttribute('data-genre');
+            document.querySelectorAll('.movie-card').forEach(card => {
+                if (genre === 'all' || card.getAttribute('data-genre') === genre) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
 
     
+</script>
 </body>
 </html>
